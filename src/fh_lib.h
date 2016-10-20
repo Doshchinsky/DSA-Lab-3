@@ -1,10 +1,31 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
+#include <stdbool.h>
 
 #ifndef FHLIB_H
 #define FHLIB_H
 
-/* Headers coming soon ... */
+struct fnode
+{
+	int degree;
+	char key;
+	char value;
+	struct fnode* parent;
+	struct fnode* child;
+	struct fnode* left;
+	struct fnode* right;
+	bool mark;
+};
+
+struct fheap
+{
+	struct fnode* min;
+	int nnodes;
+};
+
+struct fheap *fh_insert(struct fheap *heap, char *key, char *value);
+void FibHeapAddNodeToRootList(struct fnode *node, struct fnode *h);
 
 #endif
