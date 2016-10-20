@@ -45,3 +45,8 @@ void FibHeapAddNodeToRootList(struct fnode *node, struct fnode *h)
 		lnode->right= node;
 	}
 }
+
+struct fnode *fh_min(struct fheap *heap)
+{
+	return heap->min;
+}

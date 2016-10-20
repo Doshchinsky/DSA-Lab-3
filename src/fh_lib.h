@@ -27,5 +27,6 @@ struct fheap
 
 struct fheap *fh_insert(struct fheap *heap, char *key, char *value);
 void FibHeapAddNodeToRootList(struct fnode *node, struct fnode *h);
+struct fnode *fh_min(struct fheap *heap);
 
 #endif
