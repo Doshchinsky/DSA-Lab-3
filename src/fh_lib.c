@@ -50,3 +50,35 @@ struct fnode *fh_min(struct fheap *heap)
 {
 	return heap->min;
 }
+
+struct fheap *FibHeapUnion(struct fheap *heap1, struct fheap *heap2)
+{
+	struct fheap *heap = (struct fheap*)malloc(sizeof(struct fheap));
+	heap->min = heap1->min;
+	FibHeapLinkLists(heap1->min, heap2->min);
+	
+	if ((heap1->min == NULL) || (heap2->min != NULL && heap2->min->key < heap1->min->key)) {
+		heap->min= heap2->min;
+	}
+	
+	heap->nnodes = heap1->nnodes + heap2->nnodes;
+	
+	free(heap1);
+	free(heap2);
+	
+	return heap;
+}
+
+struct fnode *FibHeapLinkLists(struct fnode *heap1, struct fnode *heap2)
+{
+	if (heap1 == NULL || heap2 == NULL)
+		return 0; /*Надо уточнить, что возвращать*/
+	struct fnode *left1 = heap1->left;
+	struct fnode *left2 = heap2->left;
+	left1->right = heap2;
+	heap2->left = left1;
+	heap1->left = left2;
+	left2->right = heap1;
+
+	return heap1;
+}
