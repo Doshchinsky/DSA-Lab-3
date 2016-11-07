@@ -191,3 +191,18 @@ void FibHeapCut(struct fheap *heap, struct fheap *x, struct fheap *y)
 	x->parent= NULL;
 	x->mark= FALSE;
 }
+
+void FibHeapCascadingCut(struct fheap *heap, struct fheap *y)
+{
+	struct fheap *z = y->parent;
+
+	if (z == NULL)
+		return;
+	if (y->mark == FALSE)
+		y->mark = TRUE;
+	else
+	{
+		FibHeapCut(heap, y, z);
+		FibHeapCascadingCut(heap, z);
+	}
+}
