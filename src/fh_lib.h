@@ -35,5 +35,6 @@ void FibHeapConsolidate(struct fheap *heap);
 int D(int n);
 void FibHeapLink(heap, y, x);
 void FibHeapDecreaseKey(struct fheap *heap, struct fheap *x, char *newkey);
+void FibHeapCut(struct fheap *heap, struct fheap *x, struct fheap *y);
 
 #endif

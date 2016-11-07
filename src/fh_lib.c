@@ -180,3 +180,14 @@ void FibHeapDecreaseKey(struct fheap *heap, struct fheap *x, char *newkey)
 	if (x->key < heap->min->key)
 	heap->min = x;
 }
+
+void FibHeapCut(struct fheap *heap, struct fheap *x, struct fheap *y)
+{
+	/* Удаляем x из списка дочерних узлов y */
+	FibHeapRemoveNodeFromChildList(x, y);
+	y->degree= y->degree - 1;
+	/* Добавляем x в список корней кучи heap */
+	FibHeapAddNodeToRootList(x, heap);
+	x->parent= NULL;
+	x->mark= FALSE;
+}
