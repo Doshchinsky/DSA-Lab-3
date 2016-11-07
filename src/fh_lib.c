@@ -206,3 +206,9 @@ void FibHeapCascadingCut(struct fheap *heap, struct fheap *y)
 		FibHeapCascadingCut(heap, z);
 	}
 }
+
+void FibHeapDelete(struct fheap *heap, struct fheap *x)
+{
+	FibHeapDecreaseKey(heap, x, -Infinity);
+	FibHeapDeleteMin(heap);
+}
