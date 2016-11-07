@@ -85,8 +85,8 @@ struct fnode *FibHeapLinkLists(struct fnode *heap1, struct fnode *heap2)
 
 struct fnode *FibHeapDeleteMin(struct fheap *heap)
 {
-	struct fnode *z = heap->min;
-	struct fnode *x;
+	struct fheap *z = heap->min;
+	struct fheap *x;
 	
 	if (z == NULL)
 		return NULL;
@@ -146,7 +146,7 @@ int D(int n)
 	return floor(log(2, n));
 }
 
-void FibHeapLink(heap, y, x)
+void FibHeapLink(struct fheap *heap, struct fnode *y, struct fnode *x)
 {
 	x->degree = x->degree + 1;
 	
@@ -161,7 +161,7 @@ void FibHeapLink(heap, y, x)
 	y->mark = FALSE;
 }
 
-void FibHeapDecreaseKey(struct fheap *heap, struct fheap *x, char *newkey)
+void FibHeapDecreaseKey(struct fnode *heap, struct fnode *x, char *newkey)
 {
 	if (newkey > x->key)
 		return;	/* Новый ключ больше текущего значения ключа */
