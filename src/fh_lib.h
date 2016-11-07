@@ -30,5 +30,10 @@ void FibHeapAddNodeToRootList(struct fnode *node, struct fnode *h);
 struct fnode *fh_min(struct fheap *heap);
 struct fheap *FibHeapUnion(struct fheap *heap1, struct fheap *heap2);
 struct fnode *FibHeapLinkLists(struct fnode *heap1, struct fnode *heap2);
+struct fnode *FibHeapDeleteMin(struct fheap *heap);
+void FibHeapConsolidate(struct fheap *heap);
+int D(int n);
+void FibHeapLink(heap, y, x);
+void FibHeapDecreaseKey(struct fheap *heap, struct fheap *x, char *newkey);
 
 #endif
