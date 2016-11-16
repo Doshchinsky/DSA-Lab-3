@@ -26,7 +26,8 @@ struct fHeap
 	int nnodes;
 };
 
-struct fHeap *fh_insert(struct fHeap *heap, char *key, char *value);
+struct fHeap *fh_create();
+struct fNode *fh_insert(struct fHeap *heap, int key, char *value);
 void FibHeapAddNodeToRootList(struct fNode *node, struct fNode *h);
 struct fNode *fh_min(struct fHeap *heap);
 struct fHeap *FibHeapUnion(struct fHeap *heap1, struct fHeap *heap2);
@@ -39,5 +40,7 @@ void FibHeapDecreaseKey(struct fHeap *heap, struct fNode *x, int newkey);
 void FibHeapCut(struct fHeap *heap, struct fNode *x, struct fNode *y);
 void FibHeapCascadingCut(struct fHeap *heap, struct fNode *y);
 void FibHeapDelete(struct fHeap *heap, struct fNode *x);
+void fibPrint(struct fNode *node, int level);
+void printFibHeap(struct fHeap* heap);
 
 #endif

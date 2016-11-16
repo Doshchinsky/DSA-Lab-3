@@ -6,10 +6,18 @@
 #include <limits.h>
 #include "fh_lib.h"
 
-struct fHeap *fh_insert(struct fHeap *heap, char *key, char *value)
+struct fHeap *fh_create()
 {
-	struct fNode *node = malloc(sizeof(*node));
-	node->key = *key;
+	struct fHeap* ret = (struct fHeap*)malloc(sizeof(struct fHeap));
+	ret->min = NULL;
+	ret->nnodes = 0;
+	return ret;
+}
+
+struct fNode *fh_insert(struct fHeap *heap, int key, char *value)
+{
+	struct fNode* node = (struct fNode*)malloc(sizeof(struct fNode));
+	node->key = key;
 	node->value = *value;
 	node->degree = 0;
 	node->mark = false;
@@ -24,7 +32,7 @@ struct fHeap *fh_insert(struct fHeap *heap, char *key, char *value)
 		heap->min = node;
 	heap->nnodes = heap->nnodes+ 1;
 
-	return heap;
+	return node;
 }
 
 void FibHeapAddNodeToRootList(struct fNode *node, struct fNode *h)
@@ -268,4 +276,33 @@ void FibHeapDelete(struct fHeap *heap, struct fNode *x)
 {
 	FibHeapDecreaseKey(heap, x, INT_MIN);
 	FibHeapDeleteMin(heap);
+}
+
+void fibPrint(struct fNode *node, int level)
+{
+	struct fNode *end = node;
+	do
+	{
+		printf("%d ", node->key);
+		if (node->child == NULL)
+		{
+			printf("\n");
+			if (node->right != end)
+			for (int i = 0; i < 2 * level + level; i++)
+				printf("\t");
+			node = node->right;
+			continue;
+		}
+		else
+		{
+			fibPrint(node->child, level + 1);
+			node = node->right;
+		}
+	} while (node != end);
+	return;
+}
+
+void printFibHeap(struct fHeap* heap)
+{
+	fibPrint(heap->min, 0);
 }
