@@ -3,6 +3,7 @@
 #include <string.h>
 #include <math.h>
 #include <stdbool.h>
+#include <limits.h>
 
 #ifndef FHLIB_H
 #define FHLIB_H
@@ -33,10 +34,10 @@ struct fNode *FibHeapLinkLists(struct fNode *heap1, struct fNode *heap2);
 int FibHeapDeleteMin(struct fHeap *heap);
 void FibHeapConsolidate(struct fHeap *heap);
 int D(int n);
-void FibHeapLink(struct fHeap *heap, struct fNode *y, struct fNode *x);
-void FibHeapDecreaseKey(struct fNode *heap, struct fNode *x, char *newkey);
-void FibHeapCut(struct fHeap *heap, struct fHeap *x, struct fHeap *y);
-void FibHeapCascadingCut(struct fHeap *heap, struct fHeap *y);
-void FibHeapDelete(struct fHeap *heap, struct fHeap *x);
+//void FibHeapLink(struct fHeap *heap, struct fNode *y, struct fNode *x);
+void FibHeapDecreaseKey(struct fHeap *heap, struct fNode *x, int newkey);
+void FibHeapCut(struct fHeap *heap, struct fNode *x, struct fNode *y);
+void FibHeapCascadingCut(struct fHeap *heap, struct fNode *y);
+void FibHeapDelete(struct fHeap *heap, struct fNode *x);
 
 #endif

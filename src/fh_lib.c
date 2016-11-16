@@ -3,6 +3,7 @@
 #include <string.h>
 #include <math.h>
 #include <stdbool.h>
+#include <limits.h>
 #include "fh_lib.h"
 
 struct fHeap *fh_insert(struct fHeap *heap, char *key, char *value)
@@ -121,34 +122,66 @@ int FibHeapDeleteMin(struct fHeap *heap)
 
 void FibHeapConsolidate(struct fHeap *heap)
 {
-	struct fNode *w, *x, *y;
-	int d, i;
+	int i, d, D;
+	struct fNode* x;
+	struct fNode* w;
+	struct fNode* v;
+	struct fNode* y;
+	struct fNode* tmp;
+	struct fNode** A;
 
-	for (i= 0; i < D(heap->nnodes); i++)
-		A[i] = NULL; /* Цикл по всем узлам списка корней */
-	for each w in heap->min {
+	D = ceil(log2((float)(heap->nnodes)));
+	A = (struct fNode**)calloc(D * sizeof(struct fNode*), sizeof(struct fNode*));
+
+	v = heap->min;
+	w = heap->min;
+	do
+	{
 		x = w;
-		d = x.degree;
-		while (A[d] != NULL) {
-			y = A[d]					/* Степень y совпадает со степенью x */
-			if (x->key > y->key)
-				FibHeapSwap(x, y);		/* Обмениваем x и y */
-			FibHeapLink(heap, y, x);
+		w = w->right;
+		d = x->degree;
+		while (A[d] != NULL)
+		{
+			y = A[d];
+			if(x->key > y->key)
+			{
+				tmp = x;
+				x = y;
+				y = tmp;
+			}
+			FibHeapLinkLists(y, x);
 			A[d] = NULL;
-			d = d + 1 ;
+			d++;
 		}
 		A[d] = x;
-	}
-	/*	Находим минимальный узел */
+	} while (w != v);
+
 	heap->min = NULL;
-	for (i = 0; i < D(heap->nnodes); i++) {
-		if (A[i] != NULL) {
-			/* Добавляем A[i] в список корней */
-			FibHeapAddNodeToRootList(A[i], heap);
-			if (heap->min= NULL || A[i]->key < heap->min->key)
-				heap->min= A[i];
+	for (i = 0; i < D; i++)
+	{
+		if(A[i] != NULL)
+		{
+			if(heap->min == NULL)
+			{
+				heap->min = A[i];
+				heap->min->left = heap->min;
+				heap->min->right = heap->min;
+			}
+			else
+			{
+				A[i]->right = heap->min;
+				A[i]->left = heap->min->left;
+				heap->min->left->right = A[i];
+				heap->min->left = A[i];
+
+				if(A[i]->key < heap->min->key)
+					heap->min = A[i];
+			}
 		}
 	}
+
+	free(A);
+	return;
 }
 
 int D(int n)
@@ -156,11 +189,11 @@ int D(int n)
 	return floor(log(2));
 }
 
-void FibHeapLink(struct fHeap *heap, struct fNode *y, struct fNode *x)
+/*void FibHeapLink(struct fHeap *heap, struct fNode *y, struct fNode *x)
 {
 	x->degree = x->degree + 1;
 	
-	/* Делаем y дочерним узлом x */
+	 Делаем y дочерним узлом x 
 	
 	FibHeapRemoveNodeFromRootList(y, heap);
 	
@@ -169,15 +202,15 @@ void FibHeapLink(struct fHeap *heap, struct fNode *y, struct fNode *x)
 	FibHeapAddNodeToRootList(y, x->child);
 	
 	y->mark = FALSE;
-}
+}*/
 
-void FibHeapDecreaseKey(struct fNode *heap, struct fNode *x, char *newkey)
+void FibHeapDecreaseKey(struct fHeap *heap, struct fNode *x, int newkey)
 {
 	if (newkey > x->key)
 		return;	/* Новый ключ больше текущего значения ключа */
 	
 	x->key = newkey;
-	struct fHeap *y = x->parent;
+	struct fNode *y = x->parent;
 	
 	if (y != NULL && x->key < y->key)
 	{
@@ -191,25 +224,39 @@ void FibHeapDecreaseKey(struct fNode *heap, struct fNode *x, char *newkey)
 	heap->min = x;
 }
 
-void FibHeapCut(struct fHeap *heap, struct fHeap *x, struct fHeap *y)
+void FibHeapCut(struct fHeap *heap, struct fNode *x, struct fNode *y)
 {
-	/* Удаляем x из списка дочерних узлов y */
-	FibHeapRemoveNodeFromChildList(x, y);
-	y->degree= y->degree - 1;
-	/* Добавляем x в список корней кучи heap */
-	FibHeapAddNodeToRootList(x, heap);
-	x->parent= NULL;
-	x->mark= FALSE;
+	y->degree--;
+
+	if (x->right == x)
+	{
+		y->child = NULL;
+	}
+	else
+	{
+		y->child = x->right;
+		x->right->left = x->left;
+		x->left->right = x->right;
+	}
+	x->right = heap->min;
+	x->left = heap->min->left;
+	heap->min->left->right = x;
+	heap->min->left = x;
+
+	x->parent = NULL;
+	x->mark = false;
+
+	return;
 }
 
-void FibHeapCascadingCut(struct fHeap *heap, struct fHeap *y)
+void FibHeapCascadingCut(struct fHeap *heap, struct fNode *y)
 {
-	struct fHeap *z = y->parent;
+	struct fNode *z = y->parent;
 
 	if (z == NULL)
 		return;
-	if (y->mark == FALSE)
-		y->mark = TRUE;
+	if (y->mark == false)
+		y->mark = true;
 	else
 	{
 		FibHeapCut(heap, y, z);
@@ -217,8 +264,8 @@ void FibHeapCascadingCut(struct fHeap *heap, struct fHeap *y)
 	}
 }
 
-void FibHeapDelete(struct fHeap *heap, struct fHeap *x)
+void FibHeapDelete(struct fHeap *heap, struct fNode *x)
 {
-	FibHeapDecreaseKey(heap, x, -Infinity);
+	FibHeapDecreaseKey(heap, x, INT_MIN);
 	FibHeapDeleteMin(heap);
 }
