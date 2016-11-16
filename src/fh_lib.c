@@ -5,9 +5,9 @@
 #include <stdbool.h>
 #include "fh_lib.h"
 
-struct fheap *fh_insert(struct fheap *heap, char *key, char *value)
+struct fHeap *fh_insert(struct fHeap *heap, char *key, char *value)
 {
-	struct fnode *node = malloc(sizeof(*node));
+	struct fNode *node = malloc(sizeof(*node));
 	node->key = *key;
 	node->value = *value;
 	node->degree = 0;
@@ -26,9 +26,9 @@ struct fheap *fh_insert(struct fheap *heap, char *key, char *value)
 	return heap;
 }
 
-void FibHeapAddNodeToRootList(struct fnode *node, struct fnode *h)
+void FibHeapAddNodeToRootList(struct fNode *node, struct fNode *h)
 {
-	struct fnode *lnode;
+	struct fNode *lnode;
 
 	if (h == NULL)
 		return;
@@ -46,14 +46,14 @@ void FibHeapAddNodeToRootList(struct fnode *node, struct fnode *h)
 	}
 }
 
-struct fnode *fh_min(struct fheap *heap)
+struct fNode *fh_min(struct fHeap *heap)
 {
 	return heap->min;
 }
 
-struct fheap *FibHeapUnion(struct fheap *heap1, struct fheap *heap2)
+struct fHeap *FibHeapUnion(struct fHeap *heap1, struct fHeap *heap2)
 {
-	struct fheap *heap = (struct fheap*)malloc(sizeof(struct fheap));
+	struct fHeap *heap = (struct fHeap*)malloc(sizeof(struct fHeap));
 	heap->min = heap1->min;
 	FibHeapLinkLists(heap1->min, heap2->min);
 	
@@ -69,12 +69,12 @@ struct fheap *FibHeapUnion(struct fheap *heap1, struct fheap *heap2)
 	return heap;
 }
 
-struct fnode *FibHeapLinkLists(struct fnode *heap1, struct fnode *heap2)
+struct fNode *FibHeapLinkLists(struct fNode *heap1, struct fNode *heap2)
 {
 	if (heap1 == NULL || heap2 == NULL)
 		return NULL;
-	struct fnode *left1 = heap1->left;
-	struct fnode *left2 = heap2->left;
+	struct fNode *left1 = heap1->left;
+	struct fNode *left2 = heap2->left;
 	left1->right = heap2;
 	heap2->left = left1;
 	heap1->left = left2;
@@ -83,35 +83,45 @@ struct fnode *FibHeapLinkLists(struct fnode *heap1, struct fnode *heap2)
 	return heap1;
 }
 
-struct fnode *FibHeapDeleteMin(struct fheap *heap)
+int FibHeapDeleteMin(struct fHeap *heap)
 {
-	struct fheap *z = heap->min;
-	struct fheap *x;
-	
-	if (z == NULL)
-		return NULL;
-	
-	x = z->child;	
-	FibHeapAddNodeToRootList(x, heap);		/* Добавляем дочерний узел x в список корней */
-	x->parent= NULL;
-	
-	FibHeapRemoveNodeFromRootList(z, heap);	/* Удаляем z из списка корней */
-	
-	if (z == z->right)
+	int ret;
+	int i;
+	struct fNode* ptr;
+	struct fNode* ptr2;
+
+	ret = heap->min->key;
+	ptr = heap->min->child;
+	for (i = 0; i < heap->min->degree; i++)
+	{
+		ptr2 = ptr->right;
+		ptr->right = heap->min;
+		ptr->left = heap->min->left;
+		heap->min->left->right = ptr;
+		heap->min->left = ptr;
+		ptr = ptr2;
+	}
+
+	ptr = heap->min;
+	ptr->right->left = ptr->left;
+	ptr->left->right = ptr->right;
+
+	if(ptr == ptr->right)
 		heap->min = NULL;
-	else {
-		heap->min= z->right;
+	else
+	{
+		heap->min = ptr->right;
 		FibHeapConsolidate(heap);
 	}
-	
 	heap->nnodes = heap->nnodes - 1;
-	
-	return z;
+
+	free(ptr);
+	return ret;
 }
 
-void FibHeapConsolidate(struct fheap *heap)
+void FibHeapConsolidate(struct fHeap *heap)
 {
-	struct fnode *w, *x, *y;
+	struct fNode *w, *x, *y;
 	int d, i;
 
 	for (i= 0; i < D(heap->nnodes); i++)
@@ -143,10 +153,10 @@ void FibHeapConsolidate(struct fheap *heap)
 
 int D(int n)
 {
-	return floor(log(2, n));
+	return floor(log(2));
 }
 
-void FibHeapLink(struct fheap *heap, struct fnode *y, struct fnode *x)
+void FibHeapLink(struct fHeap *heap, struct fNode *y, struct fNode *x)
 {
 	x->degree = x->degree + 1;
 	
@@ -161,13 +171,13 @@ void FibHeapLink(struct fheap *heap, struct fnode *y, struct fnode *x)
 	y->mark = FALSE;
 }
 
-void FibHeapDecreaseKey(struct fnode *heap, struct fnode *x, char *newkey)
+void FibHeapDecreaseKey(struct fNode *heap, struct fNode *x, char *newkey)
 {
 	if (newkey > x->key)
 		return;	/* Новый ключ больше текущего значения ключа */
 	
 	x->key = newkey;
-	struct fheap *y = x->parent;
+	struct fHeap *y = x->parent;
 	
 	if (y != NULL && x->key < y->key)
 	{
@@ -181,7 +191,7 @@ void FibHeapDecreaseKey(struct fnode *heap, struct fnode *x, char *newkey)
 	heap->min = x;
 }
 
-void FibHeapCut(struct fheap *heap, struct fheap *x, struct fheap *y)
+void FibHeapCut(struct fHeap *heap, struct fHeap *x, struct fHeap *y)
 {
 	/* Удаляем x из списка дочерних узлов y */
 	FibHeapRemoveNodeFromChildList(x, y);
@@ -192,9 +202,9 @@ void FibHeapCut(struct fheap *heap, struct fheap *x, struct fheap *y)
 	x->mark= FALSE;
 }
 
-void FibHeapCascadingCut(struct fheap *heap, struct fheap *y)
+void FibHeapCascadingCut(struct fHeap *heap, struct fHeap *y)
 {
-	struct fheap *z = y->parent;
+	struct fHeap *z = y->parent;
 
 	if (z == NULL)
 		return;
@@ -207,7 +217,7 @@ void FibHeapCascadingCut(struct fheap *heap, struct fheap *y)
 	}
 }
 
-void FibHeapDelete(struct fheap *heap, struct fheap *x)
+void FibHeapDelete(struct fHeap *heap, struct fHeap *x)
 {
 	FibHeapDecreaseKey(heap, x, -Infinity);
 	FibHeapDeleteMin(heap);
