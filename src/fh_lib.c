@@ -245,14 +245,15 @@ void FibHeapCascadingCut(struct fHeap *heap, struct fNode *y)
 {
 	struct fNode *z = y->parent;
 
-	if (z == NULL)
-		return;
-	if (y->mark == false)
-		y->mark = true;
-	else
+	if (z != NULL)
 	{
-		FibHeapCut(heap, y, z);
-		FibHeapCascadingCut(heap, z);
+		if (y->mark == false)
+			y->mark = true;
+		else
+		{
+			FibHeapCut(heap, y, z);
+			FibHeapCascadingCut(heap, z);
+		}
 	}
 }
 
