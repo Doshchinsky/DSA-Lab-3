@@ -12,7 +12,6 @@ struct fNode
 {
 	int degree;
 	int key;
-	char value;
 	bool mark;
 	struct fNode* parent;
 	struct fNode* child;
@@ -27,7 +26,7 @@ struct fHeap
 };
 
 struct fHeap *fh_create();
-struct fNode *fh_insert(struct fHeap *heap, int key, char *value);
+struct fNode *fh_insert(struct fHeap *heap, int key);
 void FibHeapAddNodeToRootList(struct fNode *node, struct fNode *h);
 struct fNode *fh_min(struct fHeap *heap);
 struct fHeap *FibHeapUnion(struct fHeap *heap1, struct fHeap *heap2);

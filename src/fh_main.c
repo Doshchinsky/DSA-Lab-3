@@ -14,18 +14,17 @@ int main(int argc, char *argv[])
 	heap = fh_create();
 
 	printf("Вставляем элементы\n");
-	fh_insert(heap, 10, "10");
-	fh_insert(heap, 15, "15");
-	fh_insert(heap, 7, "7");
-	fh_insert(heap, 23, "23");
-	n = fh_insert(heap, 96, "96");
-	fh_insert(heap, 43, "43");
-	//n = fh_insert(heap, 90);
-	m = fh_insert(heap, 80, "80");
-	fh_insert(heap, 24, "24");
-	fh_insert(heap, 26, "26");
-	fh_insert(heap, 35, "35");
-	fh_insert(heap, 46, "46");
+	fh_insert(heap, 10);
+	fh_insert(heap, 15);
+	fh_insert(heap, 7);
+	fh_insert(heap, 23);
+	n = fh_insert(heap, 96);
+	fh_insert(heap, 43);
+	m = fh_insert(heap, 80);
+	fh_insert(heap, 24);
+	fh_insert(heap, 26);
+	fh_insert(heap, 35);
+	fh_insert(heap, 46);
 	printFibHeap(heap);
 
 	printf("Извлекаем минимум: %d\n", FibHeapDeleteMin(heap));
@@ -33,7 +32,6 @@ int main(int argc, char *argv[])
 	printf("После извлечения минимума\n");
 	printFibHeap(heap);
 	printf("Понижение 90 -> 85\n");
-	//fibHeapDecreaseKey(heap, n, 85);
 	printFibHeap(heap);
 
 	printf("Понижение 80 -> 55\n");
@@ -44,9 +42,9 @@ int main(int argc, char *argv[])
 	hp = fh_create();
 
 	printf("Вторя куча: Вставляем\n");
-	fh_insert(hp, 100, "100");
-	fh_insert(hp, 200, "200");
-	fh_insert(hp, 300, "300");
+	fh_insert(hp, 100);
+	fh_insert(hp, 200);
+	fh_insert(hp, 300);
 	printFibHeap(hp);
 
 	printf("Вторая куча: Извлекаем минимум: %d\n", FibHeapDeleteMin(hp));

@@ -14,11 +14,10 @@ struct fHeap *fh_create()
 	return ret;
 }
 
-struct fNode *fh_insert(struct fHeap *heap, int key, char *value)
+struct fNode *fh_insert(struct fHeap *heap, int key)
 {
 	struct fNode* node = (struct fNode*)malloc(sizeof(struct fNode));
 	node->key = key;
-	node->value = *value;
 	node->degree = 0;
 	node->mark = false;
 	node->parent = NULL;
@@ -197,21 +196,6 @@ int D(int n)
 	return floor(log(2));
 }
 
-/*void FibHeapLink(struct fHeap *heap, struct fNode *y, struct fNode *x)
-{
-	x->degree = x->degree + 1;
-	
-	 Делаем y дочерним узлом x 
-	
-	FibHeapRemoveNodeFromRootList(y, heap);
-	
-	y->parent= x;
-	
-	FibHeapAddNodeToRootList(y, x->child);
-	
-	y->mark = FALSE;
-}*/
-
 void FibHeapDecreaseKey(struct fHeap *heap, struct fNode *x, int newkey)
 {
 	if (newkey > x->key)
@@ -289,7 +273,7 @@ void fibPrint(struct fNode *node, int level)
 			printf("\n");
 			if (node->right != end)
 			for (int i = 0; i < 2 * level + level; i++)
-				printf("\t");
+				printf(" ");
 			node = node->right;
 			continue;
 		}
