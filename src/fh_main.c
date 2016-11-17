@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 	fh_insert(heap, 26);
 	fh_insert(heap, 35);
 	fh_insert(heap, 46);
-	printFibHeap(heap);
+	//printFibHeap(heap);
 
 	printf("Извлекаем минимум: %d\n", FibHeapDeleteMin(heap));
 

@@ -77,9 +77,29 @@ struct fHeap *FibHeapUnion(struct fHeap *heap1, struct fHeap *heap2)
 	return heap;
 }
 
-struct fNode *FibHeapLinkLists(struct fNode *heap1, struct fNode *heap2)
+void FibHeapLinkLists(struct fNode *node1, struct fNode *node2)
 {
-	if (heap1 == NULL || heap2 == NULL)
+	node1->left->right = node1->right;
+	node1->right->left = node1->left;
+
+	if(node2->child)
+	{
+		node1->right = node2->child;
+		node1->left = node2->child->left;
+		node2->child->left->right = node1;
+		node2->child->left = node1;
+	}
+	else
+	{
+		node2->child = node1;
+		node1->left = node1;
+		node1->right = node1;
+	}
+	node2->degree++;
+	node1->mark = 0;
+	node1->parent = node2;
+
+	/*if (heap1 == NULL || heap2 == NULL)
 		return NULL;
 	struct fNode *left1 = heap1->left;
 	struct fNode *left2 = heap2->left;
@@ -88,7 +108,7 @@ struct fNode *FibHeapLinkLists(struct fNode *heap1, struct fNode *heap2)
 	heap1->left = left2;
 	left2->right = heap1;
 
-	return heap1;
+	return heap1;*/
 }
 
 int FibHeapDeleteMin(struct fHeap *heap)
