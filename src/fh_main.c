@@ -10,10 +10,10 @@ int main(int argc, char *argv[])
 	struct fHeap *heap, *hp;
 	struct fNode *n, *m;
 
-	printf("Создаем кучу\n");
+	printf("Создаем кучу...\n");
 	heap = fh_create();
 
-	printf("Вставляем элементы\n");
+	printf("Вставляем элементы...\n");
 	fh_insert(heap, 10);
 	fh_insert(heap, 15);
 	fh_insert(heap, 7);
@@ -25,13 +25,11 @@ int main(int argc, char *argv[])
 	fh_insert(heap, 26);
 	fh_insert(heap, 35);
 	fh_insert(heap, 46);
-	//printFibHeap(heap);
+	printFibHeap(heap);
 
 	printf("Извлекаем минимум: %d\n", FibHeapDeleteMin(heap));
 
-	printf("После извлечения минимума\n");
-	printFibHeap(heap);
-	printf("Понижение 90 -> 85\n");
+	printf("После извлечения минимума:\n");
 	printFibHeap(heap);
 
 	printf("Понижение 80 -> 55\n");
@@ -39,9 +37,9 @@ int main(int argc, char *argv[])
 	FibHeapDelete(heap, n);
 	printFibHeap(heap);
 
+	printf("Создаем вторую кучу...\nВставляем элементы...\n");
+	
 	hp = fh_create();
-
-	printf("Вторя куча: Вставляем\n");
 	fh_insert(hp, 100);
 	fh_insert(hp, 200);
 	fh_insert(hp, 300);
@@ -57,5 +55,6 @@ int main(int argc, char *argv[])
 	printf("После объединения\n");
 	printFibHeap(heap);
 
+	printf("\nНаходим минимальный элемент: %d\n", heap->min->key);
 	return EXIT_SUCCESS;
 }

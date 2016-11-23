@@ -61,13 +61,23 @@ struct fNode *fh_min(struct fHeap *heap)
 
 struct fHeap *FibHeapUnion(struct fHeap *heap1, struct fHeap *heap2)
 {
-	struct fHeap *heap = (struct fHeap*)malloc(sizeof(struct fHeap));
-	heap->min = heap1->min;
-	FibHeapLinkLists(heap1->min, heap2->min);
+	struct fHeap *heap = fh_create();
+	//heap->min = heap1->min;
+	//FibHeapLinkLists(heap1->min, heap2->min);
 	
-	if ((heap1->min == NULL) || (heap2->min != NULL && heap2->min->key < heap1->min->key)) {
-		heap->min= heap2->min;
-	}
+	if (heap1->min && heap2->min) {
+		heap->min = heap1->min;
+		heap->min->left->right = heap2->min->right;
+		heap2->min->right->left = heap->min->left;
+		heap->min->left = heap2->min;
+		heap2->min->right = heap->min;
+			if ((heap1->min == NULL) || (heap2->min != NULL && heap2->min->key < heap1->min->key)) {
+				heap->min= heap2->min;
+			}
+	} else if (heap1->min != NULL)
+		heap->min = heap1->min;
+		else if (heap2->min != NULL)
+			heap->min = heap2->min;
 	
 	heap->nnodes = heap1->nnodes + heap2->nnodes;
 	
