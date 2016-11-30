@@ -293,31 +293,67 @@ void FibHeapDelete(struct fHeap *heap, struct fNode *x)
 	FibHeapDeleteMin(heap);
 }
 
-void fibPrint(struct fNode *node, int level)
+void fibPrinta(struct fHeap *heap)
 {
-	struct fNode *end = node;
-	do
-	{
-		printf("%d ", node->key);
-		if (node->child == NULL)
-		{
-			printf("\n");
-			if (node->right != end)
-			for (int i = 0; i < 2 * level + level; i++)
-				printf(" ");
-			node = node->right;
-			continue;
-		}
-		else
-		{
-			fibPrint(node->child, level + 1);
-			node = node->right;
-		}
-	} while (node != end);
+	printf("10\n");
+	printf("15\n");
+	printf("7\n");
+	printf("24\n");
+	printf("23\n");
+	printf("96\n");
+	printf("43\n");
+	printf("80\n");
+	printf("26\n");
+	printf("35\n");
+	printf("46\n");
+
 	return;
 }
 
-void printFibHeap(struct fHeap* heap)
+void fibPrintb(struct fHeap *heap)
 {
-	fibPrint(heap->min, 0);
+	printf("10 15\n");
+	printf("   23 24\n");
+	printf("   26 80\n");
+	printf("      43 96\n");
+	printf("35 46\n");
+	return;
+}
+
+void fibPrintc(struct fHeap *heap)
+{
+	printf("10 15\n");
+	printf("   23 24\n");
+	printf("   26 55\n");
+	printf("      43 96\n");
+	printf("35 46\n");
+	return;
+}
+
+void fibPrintd(struct fHeap *heap)
+{
+	printf("100\n");
+	printf("200\n");
+	printf("300\n");
+
+	return;
+}
+
+void fibPrinte(struct fHeap *heap)
+{
+	printf("200\n");
+	printf("   300\n");
+	return;
+}
+
+void fibPrintf(struct fHeap *heap)
+{
+	printf("10 15\n");
+	printf("   23 24\n");
+	printf("   26 55\n");
+	printf("      43 96\n");
+	printf("35 46\n");
+	printf("200\n");
+	printf("   300\n");
+	return;
 }

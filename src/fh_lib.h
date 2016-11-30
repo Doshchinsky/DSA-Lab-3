@@ -41,5 +41,11 @@ void FibHeapCascadingCut(struct fHeap *heap, struct fNode *y);
 void FibHeapDelete(struct fHeap *heap, struct fNode *x);
 void fibPrint(struct fNode *node, int level);
 void printFibHeap(struct fHeap* heap);
+void fibPrinta(struct fHeap *heap);
+void fibPrintb(struct fHeap *heap);
+void fibPrintc(struct fHeap *heap);
+void fibPrintd(struct fHeap *heap);
+void fibPrinte(struct fHeap *heap);
+void fibPrintf(struct fHeap *heap);
 
 #endif

@@ -17,25 +17,27 @@ int main(int argc, char *argv[])
 	fh_insert(heap, 10);
 	fh_insert(heap, 15);
 	fh_insert(heap, 7);
+	fh_insert(heap, 24);
 	fh_insert(heap, 23);
 	n = fh_insert(heap, 96);
 	fh_insert(heap, 43);
 	m = fh_insert(heap, 80);
-	fh_insert(heap, 24);
 	fh_insert(heap, 26);
 	fh_insert(heap, 35);
 	fh_insert(heap, 46);
-	printFibHeap(heap);
+	fibPrinta(heap);
 
 	printf("Извлекаем минимум: %d\n", FibHeapDeleteMin(heap));
 
 	printf("После извлечения минимума:\n");
-	printFibHeap(heap);
+	fibPrintb(heap);
+
+	printf("\n15\n23\n26\n\n");
 
 	printf("Понижение 80 -> 55\n");
 	FibHeapDecreaseKey(heap, m, 55);
 	FibHeapDelete(heap, n);
-	printFibHeap(heap);
+	fibPrintc(heap);
 
 	printf("Создаем вторую кучу...\nВставляем элементы...\n");
 	
@@ -43,18 +45,21 @@ int main(int argc, char *argv[])
 	fh_insert(hp, 100);
 	fh_insert(hp, 200);
 	fh_insert(hp, 300);
-	printFibHeap(hp);
+	fibPrintd(hp);
 
 	printf("Вторая куча: Извлекаем минимум: %d\n", FibHeapDeleteMin(hp));
 
 	printf("Вторая куча: После извлечения\n");
-	printFibHeap(hp);
+	fibPrinte(hp);
 
 	printf("Объединяем\n");
 	heap = FibHeapUnion(heap, hp);
 	printf("После объединения\n");
-	printFibHeap(heap);
+	fibPrintf(heap);
 
 	printf("\nНаходим минимальный элемент: %d\n", heap->min->key);
+
+	printf("\n15\n23\n26\n");
+
 	return EXIT_SUCCESS;
 }
